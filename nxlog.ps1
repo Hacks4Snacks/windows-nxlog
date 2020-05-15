@@ -52,13 +52,11 @@ $WebClient.DownloadFile("https://nxlog.co/system/files/products/files/348/nxlog-
 msiexec /i "$env:USERPROFILE\nxlog.msi" /quiet /passive
 sleep -s 10
 $WebClient = New-Object System.Net.WebClient
-# TODO Change configuration URL
-$WebClient.DownloadFile("CHANGEURL","$env:USERPROFILE\nxlog.conf")
+$WebClient.DownloadFile("https://raw.githubusercontent.com/Hacks4Snacks/windows-nxlog/master/nxlog_nxlog.conf","$env:USERPROFILE\nxlog.conf")
 	if($SENSORIP)
 	{
 		#Edit and replace the conf file
-		#Set the sensor IP
-		(Get-Content $PATH) | ForEach-Object { $_ -replace "SENSORIP", $SENSORIP } | Set-Content $PATH
+		(Get-Content $PATH) | ForEach-Object { $_ -replace "$SENSORIP", $SENSORIP } | Set-Content $PATH
 		#Set the logging port
 		if ($PORT -eq 'tcp')
 		{
