@@ -19,3 +19,5 @@ Please ensure proper testing is performed prior to production/large scale implem
 
 
 ## Contributing
+
+Please submit all improvements, contributions, and fixes as a GitHub issue or a pull request.
