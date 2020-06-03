@@ -15,7 +15,7 @@ In progress.
 
 1. Create a line delimited file with target computer names for installation.
 2. Download the script from this repository.
-3. Review the script and modify the function varibales to the appropriate values.
+3. Review the script and modify the function variables to the appropriate values.
 4. Run the script.
 5. Review SIEM or log collection target to validate expected ingestion.
 
