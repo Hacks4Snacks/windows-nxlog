@@ -1,5 +1,5 @@
-# windows-nxlog
-Guidance for implementing NxLog.
+# Windows NXLog Deployment Guidance
+The purpose of this repository is to provide tools and guidance for a basic implementation of NxLog.
 
 ## Advisory
 
@@ -7,7 +7,7 @@ This respository is still very much a work in progress.
 
 **Disclaimer**: Please ensure proper testing is preformed prior to applying guidance within this repository into a production environment.
 
-## NXLog Vs. Windows Event Forwarding
+## NXLog vs. Windows Event Forwarding
 
 In progress.
 
@@ -18,12 +18,6 @@ In progress.
 3. Review the script and modify the function varibales to the appropriate values.
 4. Run the script.
 5. Review SIEM or log collection target to validate expected ingestion.
-
-## Purpose
-
-- Out of the box configuration and companion script that can be easily implemented in a Windows environment
-- Reasonable log generation.
-- Human readable.
 
 ## Source Material
 
