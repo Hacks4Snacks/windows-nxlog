@@ -1,5 +1,5 @@
 # Windows NXLog Deployment Guidance
-The purpose of this repository is to provide tools and guidance for a basic implementation of NxLog.
+The purpose of this repository is to provide tools and guidance for a basic implementation of NXLog.
 
 ## Advisory
 
