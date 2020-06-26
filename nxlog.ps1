@@ -25,127 +25,115 @@ $currentPrincipal = New-Object Security.Principal.WindowsPrincipal( [Security.Pr
 if (-Not $currentPrincipal.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)) {
     Write-Host "`t[ERR] Please run this script as administrator`n" -ForegroundColor Red
     Read-Host  "Press any key to continue"
-  exit
+    exit
 }
 
-Function downloadagent 
-{
-	#Function Variables that need to be set
-	$SENSORIP = '0.0.0.0' #Set Sensor IP
-	$PORT = 'udp' #input udp or tcp
-	$PATH = "$env:USERPROFILE\nxlog.conf"
-	$DEST = "$env:ProgramFiles (x86)\nxlog\conf\nxlog.conf"
-	$WINLOGS = '' #Input y or n
-	$IISLOGS = '' #Input y or n
-	$IISELOGS = '' #Input y or n
-	$WFWLOGS = '' #Input y or n
-	$DHCPLOGS = '' #Input y or n
-	$DNSLOGS = '' #Input y or n
-	$EXCHANGE = '' #Input y or n
-	$SYSMON = '' #Input y or n
-	$SQL = '' #Input y or n
-	$NPS = '' #Input y or n
-	$SHARE = '' #Input y or n
+Function downloadagent {
+    #Function Variables that need to be set
+    $SENSORIP = '0.0.0.0' #Set Sensor IP
+    $PORT = 'udp' #input udp or tcp
+    $PATH = "$env:USERPROFILE\nxlog.conf"
+    $DEST = "$env:ProgramFiles (x86)\nxlog\conf\nxlog.conf"
+    $WINLOGS = '' #Input y or n
+    $IISLOGS = '' #Input y or n
+    $IISELOGS = '' #Input y or n
+    $WFWLOGS = '' #Input y or n
+    $DHCPLOGS = '' #Input y or n
+    $DNSLOGS = '' #Input y or n
+    $EXCHANGE = '' #Input y or n
+    $SYSMON = '' #Input y or n
+    $SQL = '' #Input y or n
+    $NPS = '' #Input y or n
+    $SHARE = '' #Input y or n
 
-#Download and install NXLog CE
-$WebClient = New-Object System.Net.WebClient
-$WebClient.DownloadFile("https://nxlog.co/system/files/products/files/348/nxlog-ce-2.10.2150.msi","$env:USERPROFILE\nxlog.msi")
-msiexec /i "$env:USERPROFILE\nxlog.msi" /quiet /passive
-sleep -s 10
-$WebClient = New-Object System.Net.WebClient
-$WebClient.DownloadFile("https://raw.githubusercontent.com/Hacks4Snacks/windows-nxlog/master/nxlog_nxlog.conf","$env:USERPROFILE\nxlog.conf")
-	if($SENSORIP)
-	{
-		#Edit and replace the conf file
-		(Get-Content $PATH) | ForEach-Object { $_ -replace "$SENSORIP", $SENSORIP } | Set-Content $PATH
-		#Set the logging port
-		if ($PORT -eq 'tcp')
-		{
-			(Get-Content $PATH) | ForEach-Object { $_ -replace "514", "601" } | Set-Content $PATH
-			(Get-Content $PATH) | ForEach-Object { $_ -replace "om_udp", "om_tcp" } | Set-Content $PATH
-		}
-		#Log Windows Events
-		if ($WINLOGS -eq 'y')
-		{
-			(Get-Content $PATH) | ForEach-Object { $_ -replace "#WIN", "" } | Set-Content $PATH
-		}
-		#Log IIS
-		if ($IISLOGS -eq 'y')
-		{
-			(Get-Content $PATH) | ForEach-Object { $_ -replace "#IIS", "" } | Set-Content $PATH
-		}
-		#Log IIS Extended
-		if ($IISELOGS -eq 'y')
-		{
-			(Get-Content $PATH) | ForEach-Object { $_ -replace "#IISE", "" } | Set-Content $PATH
-		}
-		#Windows FW
-		if( $WFWLOGS -eq 'y')
-		{
-			(Get-Content $PATH) | ForEach-Object { $_ -replace "#WFW", "" } | Set-Content $PATH
-		}
-		#DHCP
-		if ($DHCPLOGS -eq 'y')
-		{
-			(Get-Content $PATH) | ForEach-Object { $_ -replace "#DHCP", "" } | Set-Content $PATH
-		}
-		#DNS
-		if ($DNSLOGS -eq 'y')
-		{
-			(Get-Content $PATH) | ForEach-Object { $_ -replace "#DNS", "" } | Set-Content $PATH
-		}
-		#Exchange
-		if ($EXCHANGE -eq 'y')
-		{
-			(Get-Content $PATH) | ForEach-Object { $_ -replace "#EXCH", "" } | Set-Content $PATH
-		}
-		#SQL
-		if ($SQL -eq 'y')
-		{
-			(Get-Content $PATH) | ForEach-Object { $_ -replace "#SQL", "" } | Set-Content $PATH
-		}
-		#NPS
-		if ($NPS -eq 'y')
-		{
-			(Get-Content $PATH) | ForEach-Object { $_ -replace "#NPS", "" } | Set-Content $PATH
-		}
-                #SHARE
-                if ($SHARE -eq 'y')
-                {
-                        (Get-Content $PATH) | ForEach-Object { $_ -replace "#SHARE", "" } | Set-Content $PATH
-                }
+    #Download and install NXLog CE
+    $WebClient = New-Object System.Net.WebClient
+    $WebClient.DownloadFile("https://nxlog.co/system/files/products/files/348/nxlog-ce-2.10.2150.msi", "$env:USERPROFILE\nxlog.msi")
+    msiexec /i "$env:USERPROFILE\nxlog.msi" /quiet /passive
+    sleep -s 10
+    $WebClient = New-Object System.Net.WebClient
+    $WebClient.DownloadFile("https://raw.githubusercontent.com/Hacks4Snacks/windows-nxlog/master/nxlog_nxlog.conf", "$env:USERPROFILE\nxlog.conf")
+    if ($SENSORIP) {
+        #Edit and replace the conf file
+        (Get-Content $PATH) | ForEach-Object { $_ -replace "$SENSORIP", $SENSORIP } | Set-Content $PATH
+        #Set the logging port
+        if ($PORT -eq 'tcp') {
+            (Get-Content $PATH) | ForEach-Object { $_ -replace "514", "601" } | Set-Content $PATH
+            (Get-Content $PATH) | ForEach-Object { $_ -replace "om_udp", "om_tcp" } | Set-Content $PATH
+        }
+        #Log Windows Events
+        if ($WINLOGS -eq 'y') {
+            (Get-Content $PATH) | ForEach-Object { $_ -replace "#WIN", "" } | Set-Content $PATH
+        }
+        #Log IIS
+        if ($IISLOGS -eq 'y') {
+            (Get-Content $PATH) | ForEach-Object { $_ -replace "#IIS", "" } | Set-Content $PATH
+        }
+        #Log IIS Extended
+        if ($IISELOGS -eq 'y') {
+            (Get-Content $PATH) | ForEach-Object { $_ -replace "#IISE", "" } | Set-Content $PATH
+        }
+        #Windows FW
+        if ( $WFWLOGS -eq 'y') {
+            (Get-Content $PATH) | ForEach-Object { $_ -replace "#WFW", "" } | Set-Content $PATH
+        }
+        #DHCP
+        if ($DHCPLOGS -eq 'y') {
+            (Get-Content $PATH) | ForEach-Object { $_ -replace "#DHCP", "" } | Set-Content $PATH
+        }
+        #DNS
+        if ($DNSLOGS -eq 'y') {
+            (Get-Content $PATH) | ForEach-Object { $_ -replace "#DNS", "" } | Set-Content $PATH
+        }
+        #Exchange
+        if ($EXCHANGE -eq 'y') {
+            (Get-Content $PATH) | ForEach-Object { $_ -replace "#EXCH", "" } | Set-Content $PATH
+        }
+        #SQL
+        if ($SQL -eq 'y') {
+            (Get-Content $PATH) | ForEach-Object { $_ -replace "#SQL", "" } | Set-Content $PATH
+        }
+        #NPS
+        if ($NPS -eq 'y') {
+            (Get-Content $PATH) | ForEach-Object { $_ -replace "#NPS", "" } | Set-Content $PATH
+        }
+        #SHARE
+        if ($SHARE -eq 'y') {
+            (Get-Content $PATH) | ForEach-Object { $_ -replace "#SHARE", "" } | Set-Content $PATH
+        }
 		
-		#Sysmon
-		if($SYSMON -eq 'y'){
-			$WebClient = New-Object System.Net.WebClient
-			# TODO change file download locations
-            $WebClient.DownloadFile("https://s3.amazonaws.com/fl-bucket/Scripts/sysmon_config_schema4_0.xml","$env:USERPROFILE\sysmon_config_schema4_0.xml")
-			$WebClient = New-Object System.Net.WebClient
-			$WebClient.DownloadFile("https://s3.amazonaws.com/fl-bucket/Scripts/Sysmon.exe","$env:USERPROFILE\sysmon.exe")
-			sleep -s 5
-			$sysconf = "$env:USERPROFILE\sysmon_config_schema4_0.xml"
-			$sysmon="$env:USERPROFILE\sysmon.exe"
-			Start-Process -FilePath $sysmon "-accepteula -h md5 -n -l -i $sysconf"
-			sleep -s 5
-			(Get-Content $PATH) | ForEach-Object { $_ -replace "#SYSM", "" } | Set-Content $PATH}
+        #Sysmon
+        if ($SYSMON -eq 'y') {
+            $WebClient = New-Object System.Net.WebClient
+            # TODO change file download locations
+            $WebClient.DownloadFile("https://s3.amazonaws.com/fl-bucket/Scripts/sysmon_config_schema4_0.xml", "$env:USERPROFILE\sysmon_config_schema4_0.xml")
+            $WebClient = New-Object System.Net.WebClient
+            $WebClient.DownloadFile("https://s3.amazonaws.com/fl-bucket/Scripts/Sysmon.exe", "$env:USERPROFILE\sysmon.exe")
+            sleep -s 5
+            $sysconf = "$env:USERPROFILE\sysmon_config_schema4_0.xml"
+            $sysmon = "$env:USERPROFILE\sysmon.exe"
+            Start-Process -FilePath $sysmon "-accepteula -h md5 -n -l -i $sysconf"
+            sleep -s 5
+            (Get-Content $PATH) | ForEach-Object { $_ -replace "#SYSM", "" } | Set-Content $PATH
+        }
 		
-		#Copy the conf file to the NXLog system folder
-		Copy-Item -Path $PATH -Destination $DEST -force
-	}
-	'Starting service...'
-	#Check if NxLog is installed
-	$Service = Get-Service -display nxlog -ErrorAction SilentlyContinue 
-		If (-Not $Service) {
-		"NxLog is not installed on this server."
-		}else{
-			#Start nxlog service
-			Start-Service nxlog
-			'Done!'
-		}
-	sleep -s 3
+        #Copy the conf file to the NXLog system folder
+        Copy-Item -Path $PATH -Destination $DEST -force
+    }
+    'Starting service...'
+    #Check if NxLog is installed
+    $Service = Get-Service -display nxlog -ErrorAction SilentlyContinue 
+    If (-Not $Service) {
+        "NxLog is not installed on this server."
+    }
+    else {
+        #Start nxlog service
+        Start-Service nxlog
+        'Done!'
+    }
+    sleep -s 3
 }
 
-ForEach ($computer in $COMPUTERS) 
-{
-Invoke-Command -ComputerName $computer -ScriptBlock ${Function:downloadagent}
+ForEach ($computer in $COMPUTERS) {
+    Invoke-Command -ComputerName $computer -ScriptBlock ${Function:downloadagent}
 }
