@@ -12,8 +12,8 @@
 # in order to it to function properly.
 # Target hosts must have access to the internet in order to download configurations.
 #
-# Version: 0.1.0
-# Last modification: 2020-02-19
+# Version: 0.1.1
+# Last modification: 2020-06-26
 ###########################################
 
 #Global Variables
@@ -44,9 +44,10 @@ Function downloadagent
 	$EXCHANGE = '' #Input y or n
 	$SYSMON = '' #Input y or n
 	$SQL = '' #Input y or n
-	$NPS = '' #Input y or n	
+	$NPS = '' #Input y or n
+	$SHARE = '' #Input y or n
+
 #Download and install NXLog CE
-'Installing...'
 $WebClient = New-Object System.Net.WebClient
 $WebClient.DownloadFile("https://nxlog.co/system/files/products/files/348/nxlog-ce-2.10.2150.msi","$env:USERPROFILE\nxlog.msi")
 msiexec /i "$env:USERPROFILE\nxlog.msi" /quiet /passive
@@ -108,6 +109,11 @@ $WebClient.DownloadFile("https://raw.githubusercontent.com/Hacks4Snacks/windows-
 		{
 			(Get-Content $PATH) | ForEach-Object { $_ -replace "#NPS", "" } | Set-Content $PATH
 		}
+                #SHARE
+                if ($SHARE -eq 'y')
+                {
+                        (Get-Content $PATH) | ForEach-Object { $_ -replace "#SHARE", "" } | Set-Content $PATH
+                }
 		
 		#Sysmon
 		if($SYSMON -eq 'y'){
