@@ -1,4 +1,6 @@
 # Windows NXLog Deployment Guidance
+[![CodeFactor](https://www.codefactor.io/repository/github/hacks4snacks/windows-nxlog/badge)](https://www.codefactor.io/repository/github/hacks4snacks/windows-nxlog)
+
 The purpose of this repository is to provide tools and guidance for a basic implementation of NXLog.
 
 ## Advisory
