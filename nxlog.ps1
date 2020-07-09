@@ -12,8 +12,8 @@
 # in order to it to function properly.
 # Target hosts must have access to the internet in order to download configurations.
 #
-# Version: 0.1.1
-# Last modification: 2020-06-26
+# Version: 0.1.2
+# Last modification: 2020-07-09
 ###########################################
 
 #Global Variables
@@ -23,7 +23,7 @@ $COMPUTERS = Get-Content "C:\PATH\TO\LOG\FILE"
 Write-Verbose "[+] Checking if script is running as administrator.."
 $currentPrincipal = New-Object Security.Principal.WindowsPrincipal( [Security.Principal.WindowsIdentity]::GetCurrent() )
 if (-Not $currentPrincipal.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)) {
-    Write-Verbose "`t[ERR] Please run this script as administrator`n" -ForegroundColor Red
+    Write-Verbose "`t[ERR] Please run this script as administrator`n" #-ForegroundColor Red
     Read-Host  "Press any key to continue"
     exit
 }
@@ -104,16 +104,17 @@ Function downloadagent {
 		
         #Sysmon
         if ($SYSMON -eq 'y') {
+            [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
             $WebClient = New-Object System.Net.WebClient
-            # TODO change file download locations
-            $WebClient.DownloadFile("https://s3.amazonaws.com/fl-bucket/Scripts/sysmon_config_schema4_0.xml", "$env:USERPROFILE\sysmon_config_schema4_0.xml")
+            # TODO transition from EXE download to Microsoft latest version zip
+            $WebClient.DownloadFile("https://raw.githubusercontent.com/Hacks4Snacks/windows-nxlog/master/sysmon_config_schema4_0.xml", "$env:USERPROFILE\sysmon_config_schema4_0.xml")
             $WebClient = New-Object System.Net.WebClient
-            $WebClient.DownloadFile("https://s3.amazonaws.com/fl-bucket/Scripts/Sysmon.exe", "$env:USERPROFILE\sysmon.exe")
-            sleep -s 5
+            $WebClient.DownloadFile("https://github.com/Hacks4Snacks/windows-nxlog/raw/master/Sysmon.exe", "$env:USERPROFILE\Sysmon.exe")
+            sleep -s 10
             $sysconf = "$env:USERPROFILE\sysmon_config_schema4_0.xml"
-            $sysmon = "$env:USERPROFILE\sysmon.exe"
+            $sysmon = "$env:USERPROFILE\Sysmon.exe"
             Start-Process -FilePath $sysmon "-accepteula -h md5 -n -l -i $sysconf"
-            sleep -s 5
+            sleep -s 10
             (Get-Content $PATH) | ForEach-Object { $_ -replace "#SYSM", "" } | Set-Content $PATH
         }
 		
