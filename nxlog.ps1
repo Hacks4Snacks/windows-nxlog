@@ -20,10 +20,10 @@
 $COMPUTERS = Get-Content "C:\PATH\TO\LOG\FILE"
 
 # Check to make sure script is running as admin
-Write-Host "[+] Checking if script is running as administrator.."
+Write-Verbose "[+] Checking if script is running as administrator.."
 $currentPrincipal = New-Object Security.Principal.WindowsPrincipal( [Security.Principal.WindowsIdentity]::GetCurrent() )
 if (-Not $currentPrincipal.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)) {
-    Write-Host "`t[ERR] Please run this script as administrator`n" -ForegroundColor Red
+    Write-Verbose "`t[ERR] Please run this script as administrator`n" -ForegroundColor Red
     Read-Host  "Press any key to continue"
     exit
 }
