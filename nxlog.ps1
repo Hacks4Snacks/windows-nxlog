@@ -12,8 +12,8 @@
 # in order to it to function properly.
 # Target hosts must have access to the internet in order to download configurations.
 #
-# Version: 0.1.2
-# Last modification: 2020-07-09
+# Version: 0.1.3
+# Last modification: 2020-08-19
 ###########################################
 
 #Global Variables
@@ -31,7 +31,7 @@ if (-Not $currentPrincipal.IsInRole([Security.Principal.WindowsBuiltInRole]::Adm
 Function downloadagent {
     #Function Variables that need to be set
     $SENSORIP = '0.0.0.0' #Set Sensor IP
-    $PORT = 'udp' #input udp or tcp
+    $PORT = 'udp' #input udp or tcp, configurations default to port 514/UDP
     $PATH = "$env:USERPROFILE\nxlog.conf"
     $DEST = "$env:ProgramFiles (x86)\nxlog\conf\nxlog.conf"
     $WINLOGS = '' #Input y or n
@@ -45,6 +45,9 @@ Function downloadagent {
     $SQL = '' #Input y or n
     $NPS = '' #Input y or n
     $SHARE = '' #Input y or n
+    $NET = '' #Input y or n
+    $FTP = '' #Input y or n
+    $IIE2 = '' #Input y or n
 
     #Download and install NXLog CE
     $WebClient = New-Object System.Net.WebClient
@@ -101,7 +104,18 @@ Function downloadagent {
         if ($SHARE -eq 'y') {
             (Get-Content $PATH) | ForEach-Object { $_ -replace "#SHARE", "" } | Set-Content $PATH
         }
-		
+        #NET
+        if ($NET -eq 'y') {
+            (Get-Content $PATH) | ForEach-Object { $_ -replace "#NET", "" } | Set-Content $PATH
+        }
+        #FTP
+        if ($FTP -eq 'y') {
+            (Get-Content $PATH) | ForEach-Object { $_ -replace "#FTP", "" } | Set-Content $PATH
+        }
+        #IIE2
+        if ($IIE2 -eq 'y') {
+            (Get-Content $PATH) | ForEach-Object { $_ -replace "#IIE2", "" } | Set-Content $PATH
+        }	
         #Sysmon
         if ($SYSMON -eq 'y') {
             [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
